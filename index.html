@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Yahala World — Smart Event Management Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Cairo:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<!-- Loader -->
+<div class="loader" id="loader">
+  <div class="loader-inner">
+    <img class="loader-logo" src="assets/logo.png" alt="Yahala World" onerror="this.onerror=null;this.src='assets/logo-placeholder.svg';" />
+    <div class="loader-ring"></div>
+  </div>
+</div>
+
+<!-- Custom cursor -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-dot" id="cursor-dot"></div>
+
+<!-- Interactive brand pattern (parallax + mouse follow).
+     SWAP TIP: replace assets/pattern.svg with your own pattern.png/svg —
+     it will tile automatically. -->
+<div class="pattern-bg" id="pattern-bg">
+  <div class="pattern-layer" id="pattern-layer-1"></div>
+  <div class="pattern-layer pattern-layer-2" id="pattern-layer-2"></div>
+</div>
+
+<!-- Background canvas (floating 3D shapes) -->
+<canvas id="bg-canvas"></canvas>
+
+<!-- Navigation
+     LOGO: drop your real logo PNG into assets/logo.png and it will appear automatically.
+     Until then, the placeholder SVG shows. -->
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="#" class="logo">
+      <img class="logo-img" src="assets/logo.png" alt="Yahala World" onerror="this.onerror=null;this.src='assets/logo-placeholder.svg';" />
+      <span class="logo-text">Yahala World</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#home">Home</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#why">Why Choose Us</a></li>
+      <li><a href="#solutions">Solutions</a></li>
+      <li><a href="#partners">Partners</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <div class="nav-right">
+      <a href="ar/index.html" class="lang-switch" aria-label="Switch to Arabic">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></svg>
+        <span>عربي</span>
+      </a>
+      <a href="#contact" class="nav-cta">Book a Demo</a>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero-v4" id="home">
+  <div class="container">
+    <div class="hero-v4-head reveal">
+      <div class="eyebrow eyebrow-light">Live across the Gulf</div>
+      <h1 class="hero-v4-title">This is where the Gulf's <span class="gold">biggest events</span> happen.</h1>
+      <p class="hero-v4-sub">Right now, across 8 cities, dozens of events are running on Yahala — and our team is on the ground for every one.</p>
+      <div class="hero-v4-actions">
+        <a href="#contact" class="btn btn-primary"><span>Book a Demo</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg></a>
+        <a href="#solutions" class="btn btn-ghost-light" style="color:var(--linen);border-color:rgba(232,227,217,0.3)"><span>See How It Works</span></a>
+      </div>
+    </div>
+    <div class="ticker-rows">
+      <div class="ticker-row">
+        <div class="ticker-track">
+          <span class="t-pill"><span class="flag">🇸🇦</span> Government Forums <span class="live">LIVE</span> <span class="num">5,120 in</span></span>
+          <span class="t-pill"><span class="flag">🇦🇪</span> Tech Conferences <span class="live">LIVE</span> <span class="num">2,847 in</span></span>
+          <span class="t-pill"><span class="flag">🇶🇦</span> Education Expos <span class="live">LIVE</span> <span class="num">1,932 in</span></span>
+          <span class="t-pill"><span class="flag">🇧🇭</span> Healthcare Summits <span class="live">LIVE</span> <span class="num">1,205 in</span></span>
+          <span class="t-pill"><span class="flag">🇰🇼</span> Finance Forums <span class="num">980 reg.</span></span>
+          <!-- duplicate for seamless loop -->
+          <span class="t-pill"><span class="flag">🇸🇦</span> Government Forums <span class="live">LIVE</span> <span class="num">5,120 in</span></span>
+          <span class="t-pill"><span class="flag">🇦🇪</span> Tech Conferences <span class="live">LIVE</span> <span class="num">2,847 in</span></span>
+          <span class="t-pill"><span class="flag">🇶🇦</span> Education Expos <span class="live">LIVE</span> <span class="num">1,932 in</span></span>
+          <span class="t-pill"><span class="flag">🇧🇭</span> Healthcare Summits <span class="live">LIVE</span> <span class="num">1,205 in</span></span>
+          <span class="t-pill"><span class="flag">🇰🇼</span> Finance Forums <span class="num">980 reg.</span></span>
+        </div>
+      </div>
+      <div class="ticker-row">
+        <div class="ticker-track reverse">
+          <span class="t-pill"><span class="flag">🇦🇪</span> Innovation Showcases <span class="live">LIVE</span> <span class="num">1,640 in</span></span>
+          <span class="t-pill"><span class="flag">🇸🇦</span> Trade Exhibitions <span class="live">LIVE</span> <span class="num">2,410 in</span></span>
+          <span class="t-pill"><span class="flag">🇴🇲</span> Energy Summits <span class="num">1,540 reg.</span></span>
+          <span class="t-pill"><span class="flag">🇶🇦</span> Medical Conferences <span class="num">820 reg.</span></span>
+          <span class="t-pill"><span class="flag">🇦🇪</span> Arts &amp; Culture Festivals <span class="live">LIVE</span> <span class="num">3,100 in</span></span>
+          <!-- duplicate -->
+          <span class="t-pill"><span class="flag">🇦🇪</span> Innovation Showcases <span class="live">LIVE</span> <span class="num">1,640 in</span></span>
+          <span class="t-pill"><span class="flag">🇸🇦</span> Trade Exhibitions <span class="live">LIVE</span> <span class="num">2,410 in</span></span>
+          <span class="t-pill"><span class="flag">🇴🇲</span> Energy Summits <span class="num">1,540 reg.</span></span>
+          <span class="t-pill"><span class="flag">🇶🇦</span> Medical Conferences <span class="num">820 reg.</span></span>
+          <span class="t-pill"><span class="flag">🇦🇪</span> Arts &amp; Culture Festivals <span class="live">LIVE</span> <span class="num">3,100 in</span></span>
+        </div>
+      </div>
+      <div class="ticker-row">
+        <div class="ticker-track fast">
+          <span class="t-pill"><span class="flag">🇸🇦</span> Industry Forums <span class="live">LIVE</span> <span class="num">1,180 in</span></span>
+          <span class="t-pill"><span class="flag">🇦🇪</span> Excellence Awards <span class="num">3,400 reg.</span></span>
+          <span class="t-pill"><span class="flag">🇧🇭</span> Banking Conferences <span class="live">LIVE</span> <span class="num">760 in</span></span>
+          <span class="t-pill"><span class="flag">🇶🇦</span> Sports Events <span class="num">5,800 reg.</span></span>
+          <span class="t-pill"><span class="flag">🇸🇦</span> Investment Summits <span class="num">1,950 reg.</span></span>
+          <!-- duplicate -->
+          <span class="t-pill"><span class="flag">🇸🇦</span> Industry Forums <span class="live">LIVE</span> <span class="num">1,180 in</span></span>
+          <span class="t-pill"><span class="flag">🇦🇪</span> Excellence Awards <span class="num">3,400 reg.</span></span>
+          <span class="t-pill"><span class="flag">🇧🇭</span> Banking Conferences <span class="live">LIVE</span> <span class="num">760 in</span></span>
+          <span class="t-pill"><span class="flag">🇶🇦</span> Sports Events <span class="num">5,800 reg.</span></span>
+          <span class="t-pill"><span class="flag">🇸🇦</span> Investment Summits <span class="num">1,950 reg.</span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Stats strip -->
+<section class="stats reveal">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="stat">
+        <div class="stat-num" data-count="10">0</div>
+        <div class="stat-label">Years of Track Record</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num" data-count="500">0</div>
+        <div class="stat-suffix">+</div>
+        <div class="stat-label">Events Delivered</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num" data-count="98">0</div>
+        <div class="stat-suffix">%</div>
+        <div class="stat-label">Client Satisfaction</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num" data-count="24">0</div>
+        <div class="stat-suffix">/7</div>
+        <div class="stat-label">Live Support</div>
+      </div>
+      <div class="stat">
+        <div class="stat-prefix">&lt;</div>
+        <div class="stat-num" data-count="24">0</div>
+        <div class="stat-suffix">h</div>
+        <div class="stat-label">Quote Turnaround</div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- ABOUT US (new) -->
+<section class="about-us" id="about">
+  <div class="container">
+    <div class="about-us-grid">
+      <div class="about-us-text reveal">
+        <div class="eyebrow">About Yahala World</div>
+        <h2 class="section-title">A smarter way to manage events <span class="gradient">across the Gulf and beyond.</span></h2>
+        <p class="lead">Yahala World is an intelligent event management platform built for serious organizers — from government summits and corporate conferences to international exhibitions. We bring registration, attendance, programming, certificates, audience interaction, and analytics into one connected experience.</p>
+        <p class="lead">Founded in the UAE and trusted by ministries, multinationals, and institutions across the region, our team blends technology with hands-on event expertise to deliver experiences that feel effortless on the day and pay off long after.</p>
+        <div class="about-us-cta">
+          <a href="#solutions" class="btn btn-primary">
+            <span>Explore Our Solutions</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+          </a>
+          <a href="#contact" class="btn btn-ghost-light"><span>Talk to Our Team</span></a>
+        </div>
+      </div>
+      <div class="about-us-visual reveal">
+        <div class="au-card tilt">
+          <div class="au-stat-row">
+            <div><strong>10+</strong><span>Years of expertise</span></div>
+            <div><strong>500+</strong><span>Events powered</span></div>
+          </div>
+          <div class="au-stat-row">
+            <div><strong>5</strong><span>Industries served</span></div>
+            <div><strong>2</strong><span>Languages native</span></div>
+          </div>
+          <div class="au-tags">
+            <span>Government</span>
+            <span>Enterprise</span>
+            <span>Conferences</span>
+            <span>Education</span>
+            <span>Exhibitions</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Vision / Mission / Goals -->
+    <div class="vision-grid">
+      <div class="vision-card tilt reveal">
+        <div class="vision-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>
+        </div>
+        <div class="vision-num">Our Vision</div>
+        <p>To become the most trusted intelligence layer for live experiences in the region — where every attendee feels seen and every organizer feels in control.</p>
+      </div>
+      <div class="vision-card tilt reveal">
+        <div class="vision-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+        </div>
+        <div class="vision-num">Our Mission</div>
+        <p>Equip event teams with smart tools that automate the routine, surface the data that matters, and amplify the human moments that make an event memorable.</p>
+      </div>
+      <div class="vision-card tilt reveal">
+        <div class="vision-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+        </div>
+        <div class="vision-num">Our Goals</div>
+        <p>Cut planning time in half, lift attendee satisfaction, and turn every event into measurable outcomes for the brands and institutions behind them.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Lifecycle (split) -->
+<section class="lifecycle">
+  <div class="container">
+    <div class="lifecycle-grid">
+      <div class="reveal">
+        <div class="eyebrow">End to end</div>
+        <h2 class="section-title-l">From the first registration to the final report — we handle everything.</h2>
+        <p class="lead">A single connected platform for every stage of your event. No spreadsheets glued to inboxes glued to badge printers. Just one source of truth, one team supporting you, one experience for your attendees.</p>
+        <ul class="check-list">
+          <li><span class="check">✓</span> Branded registration flows that match your visual identity</li>
+          <li><span class="check">✓</span> On-site check-in, badge printing, and live capacity tracking</li>
+          <li><span class="check">✓</span> Audience interaction tools that turn watchers into participants</li>
+          <li><span class="check">✓</span> Post-event analytics that prove ROI to your stakeholders</li>
+        </ul>
+      </div>
+      <div class="lifecycle-visual reveal">
+        <div class="lv-card tilt">
+          <div class="lv-head">
+            <div class="lv-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 14l4-4 4 4 5-6"/></svg>
+            </div>
+            <div>
+              <div class="lv-title">Reports That Drive Decisions</div>
+              <div class="lv-sub">Live dashboards · exportable in one click</div>
+            </div>
+          </div>
+          <div class="lv-graph">
+            <svg viewBox="0 0 220 80" preserveAspectRatio="none">
+              <path d="M0,60 C30,40 50,55 80,30 S140,55 170,20 200,40 220,15" fill="none" stroke="url(#g1)" stroke-width="2.5"/>
+              <defs>
+                <linearGradient id="g1" x1="0" x2="1">
+                  <stop offset="0" stop-color="#3d2475"/>
+                  <stop offset="1" stop-color="#c9a456"/>
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+          <div class="lv-stats">
+            <div><strong>+38%</strong><span>Engagement</span></div>
+            <div><strong>4.8/5</strong><span>NPS</span></div>
+            <div><strong>92%</strong><span>Check-in</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Feature strip (dark band) -->
+<section class="feature-strip">
+  <div class="container">
+    <div class="strip-inner">
+      <div class="strip-head reveal">
+        <div class="eyebrow eyebrow-light">What we promise</div>
+        <h2 class="strip-title">Simplifying events <span class="gold">for a demanding world.</span></h2>
+      </div>
+      <div class="strip-grid">
+        <div class="strip-item reveal">
+          <div class="strip-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8z"/></svg>
+          </div>
+          <h4>Speed &amp; Efficiency</h4>
+          <p>Move from brief to launch in days. Templated flows, ready-to-deploy modules, and a team that doesn't slow you down.</p>
+        </div>
+        <div class="strip-item reveal">
+          <div class="strip-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></svg>
+          </div>
+          <h4>Multilingual Platform</h4>
+          <p>Native Arabic and English across every screen, every notification, every report — RTL handled correctly throughout.</p>
+        </div>
+        <div class="strip-item reveal">
+          <div class="strip-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2 4 6v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V6l-8-4z"/></svg>
+          </div>
+          <h4>Data Security</h4>
+          <p>Enterprise-grade encryption, regional data residency, and access controls aligned with public-sector requirements.</p>
+        </div>
+        <div class="strip-item reveal">
+          <div class="strip-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 12c2-4 4-6 9-6s7 2 9 6c-2 4-4 6-9 6s-7-2-9-6z"/><circle cx="12" cy="12" r="2.5"/></svg>
+          </div>
+          <h4>Smart Analytics</h4>
+          <p>Real-time dashboards, attribution, and post-event insights that give your leadership team something to act on.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Solutions -->
+<section class="solutions" id="solutions">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="eyebrow">Our Solutions</div>
+      <h2 class="section-title">Six modules. <span class="gradient">One connected platform.</span></h2>
+      <p class="section-sub">Pick what you need today — scale into the rest tomorrow. Every module talks to the others natively, with no integration headaches.</p>
+    </div>
+    <div class="solutions-grid">
+      <article class="sol-card tilt reveal">
+        <div class="sol-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+        </div>
+        <h3>Smart Event Registration</h3>
+        <p>Branded sign-up flows, dynamic forms, ticketing, and self-service kiosks across web and mobile.</p>
+      </article>
+      <article class="sol-card tilt reveal">
+        <div class="sol-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 12l2-2 4 4 8-8 4 4"/><path d="M3 20h18"/></svg>
+        </div>
+        <h3>Attendance &amp; Venue Management</h3>
+        <p>QR check-in, badge printing, capacity heatmaps, and live venue flow analytics.</p>
+      </article>
+      <article class="sol-card tilt reveal">
+        <div class="sol-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-7 8-7s8 3 8 7"/></svg>
+        </div>
+        <h3>Speaker &amp; Program Management</h3>
+        <p>Coordinate sessions, schedules, and stage management on one collaborative timeline.</p>
+      </article>
+      <article class="sol-card tilt reveal">
+        <div class="sol-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 6h16v12H4z"/><path d="M8 10h8M8 14h5"/><circle cx="17" cy="15" r="2"/></svg>
+        </div>
+        <h3>Digital Certificates</h3>
+        <p>Auto-generated, verifiable credentials delivered to attendees the moment they earn them.</p>
+      </article>
+      <article class="sol-card tilt reveal">
+        <div class="sol-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 11h2v3H3zM7 7h2v11H7zM11 9h2v9h-2zM15 5h2v13h-2zM19 11h2v3h-2z"/></svg>
+        </div>
+        <h3>Live Interaction</h3>
+        <p>Polls, Q&amp;A, gamification, and live moderation that turns watchers into participants.</p>
+      </article>
+      <article class="sol-card tilt reveal">
+        <div class="sol-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 3v18h18"/><path d="M7 14l4-4 4 4 5-6"/></svg>
+        </div>
+        <h3>Reports &amp; Analytics</h3>
+        <p>Decision-ready dashboards with attribution, ROI, and audience insights — exportable in one click.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- Get this -->
+<section class="get-this">
+  <div class="container">
+    <div class="section-head reveal">
+      <h2 class="section-title">What you actually get.</h2>
+    </div>
+    <div class="get-grid">
+      <ul>
+        <li><span class="check">✓</span> Custom-branded registration pages</li>
+        <li><span class="check">✓</span> Multi-channel attendee communication</li>
+        <li><span class="check">✓</span> Mobile event app with personalized agendas</li>
+        <li><span class="check">✓</span> Secure on-site payment terminal</li>
+      </ul>
+      <ul>
+        <li><span class="check">✓</span> QR access control on every entry point</li>
+        <li><span class="check">✓</span> Live audio &amp; video interaction tools</li>
+        <li><span class="check">✓</span> Real-time attendance &amp; behavior tracking</li>
+        <li><span class="check">✓</span> Verifiable digital certificates with QR codes</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- Industries (pinned horizontal scroll) -->
+<section class="industries" id="industries">
+  <div class="industries-pin">
+    <div class="industries-head">
+      <div class="eyebrow">Industries we serve</div>
+      <h2 class="section-title">Managing events for <span class="gradient">every sector, every day.</span></h2>
+    </div>
+    <div class="industries-track" id="industries-track">
+      <div class="ind-card">
+        <div class="ind-num">01</div>
+        <h3>Government</h3>
+        <p>Secure, compliant, multilingual events for ministries, summits, and public sector forums.</p>
+      </div>
+      <div class="ind-card">
+        <div class="ind-num">02</div>
+        <h3>Corporate &amp; Business</h3>
+        <p>Town halls, product launches, and global kickoffs — branded end-to-end and measured precisely.</p>
+      </div>
+      <div class="ind-card">
+        <div class="ind-num">03</div>
+        <h3>Conferences</h3>
+        <p>Multi-track agendas, speaker management, and audience engagement at scale.</p>
+      </div>
+      <div class="ind-card">
+        <div class="ind-num">04</div>
+        <h3>Institutions</h3>
+        <p>Universities, training programs, and certifications with verifiable, auditable outcomes.</p>
+      </div>
+      <div class="ind-card">
+        <div class="ind-num">05</div>
+        <h3>Exhibition Organizers</h3>
+        <p>Booth management, lead capture, and visitor flow analytics for exhibitors and operators.</p>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- Why -->
+<section class="why" id="why">
+  <div class="container">
+    <div class="why-grid-outer">
+      <div class="reveal">
+        <div class="eyebrow">Why Choose Yahala World</div>
+        <h2 class="section-title-l">What makes us different from the rest.</h2>
+        <p class="lead">Six things our clients say they couldn't find anywhere else — the reasons they keep coming back, year after year.</p>
+      </div>
+      <div class="why-grid">
+        <div class="why-item reveal">
+          <span class="why-tick">01</span>
+          <h4>Contract Flexibility</h4>
+          <p>Adapt the platform to your workflow — not the other way around.</p>
+        </div>
+        <div class="why-item reveal">
+          <span class="why-tick">02</span>
+          <h4>Fast Response</h4>
+          <p>Quotes back in under 24 hours. Real humans, ready to move.</p>
+        </div>
+        <div class="why-item reveal">
+          <span class="why-tick">03</span>
+          <h4>Marketing Partnerships</h4>
+          <p>Built-in promotion channels to help you fill seats faster.</p>
+        </div>
+        <div class="why-item reveal">
+          <span class="why-tick">04</span>
+          <h4>Multilingual Support</h4>
+          <p>Arabic and English across every interaction — and beyond.</p>
+        </div>
+        <div class="why-item reveal">
+          <span class="why-tick">05</span>
+          <h4>Specialized Events Team</h4>
+          <p>Senior operators who have run the events you're about to run.</p>
+        </div>
+        <div class="why-item reveal">
+          <span class="why-tick">06</span>
+          <h4>24/7 Professional Support</h4>
+          <p>Event day is when we lean in hardest. We don't sleep when you don't.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Partners -->
+<section class="partners" id="partners">
+  <div class="container">
+    <div class="partners-grid">
+      <div class="partners-text reveal">
+        <div class="eyebrow">Trusted by leaders</div>
+        <h2 class="section-title-l">Powering events for top organizations.</h2>
+        <p class="lead">From government bodies to global enterprises, our clients rely on us to deliver smooth, scalable, and unforgettable event experiences.</p>
+      </div>
+      <div class="partners-logos reveal">
+        <div class="logo-tile">ACRONIS</div>
+        <div class="logo-tile">MICROSOFT</div>
+        <div class="logo-tile">LENOVO</div>
+        <div class="logo-tile">CISCO</div>
+        <div class="logo-tile">RIPE</div>
+        <div class="logo-tile">UBUNTU</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonials -->
+<section class="testimonials">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="eyebrow">Testimonials</div>
+      <h2 class="section-title">What organizers <span class="gradient">say about us.</span></h2>
+    </div>
+    <div class="t-grid">
+      <blockquote class="t-card reveal">
+        <p>We replaced four separate tools with one platform and our planning cycle went from weeks to days. The team feels less stressed and the attendees notice the difference.</p>
+        <footer>— Operations Lead, Regional Tech Summit</footer>
+      </blockquote>
+      <blockquote class="t-card reveal">
+        <p>The live analytics changed how our executives think about events. We finally know what worked, what didn't, and where to invest next year.</p>
+        <footer>— Director of Marketing, Enterprise Conference</footer>
+      </blockquote>
+      <blockquote class="t-card reveal">
+        <p>On event day they felt like an extension of our team. Everything just worked, and the audience felt it from the first minute.</p>
+        <footer>— Head of Communications, Government Forum</footer>
+      </blockquote>
+    </div>
+  </div>
+</section>
+
+<!-- CTA / Contact (dark) -->
+<section class="contact" id="contact">
+  <div class="container">
+    <div class="contact-card reveal">
+      <div class="contact-left">
+        <div class="eyebrow eyebrow-light">Let's Talk</div>
+        <h2 class="section-title">Partner with us for <span class="gold">your next event.</span></h2>
+        <p>Tell us a little about what you're planning. We'll come back within 24 hours with ideas, options, and a price.</p>
+        <div class="contact-benefits">
+          <div><span class="check">✓</span> Free consultation</div>
+          <div><span class="check">✓</span> Quick setup</div>
+          <div><span class="check">✓</span> Specialized event team</div>
+          <div><span class="check">✓</span> Multilingual support</div>
+        </div>
+        <ul class="contact-meta">
+          <li>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.86 19.86 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.86 19.86 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.37 1.9.72 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.35 1.85.59 2.81.72A2 2 0 0 1 22 16.92z"/></svg>
+            +971 4 000 0000
+          </li>
+          <li>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 4h16v16H4z"/><path d="m4 4 8 8 8-8"/></svg>
+            hello@yahalaworld.com
+          </li>
+          <li>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            Dubai, United Arab Emirates
+          </li>
+        </ul>
+      </div>
+      <form class="contact-form" onsubmit="event.preventDefault(); const b = this.querySelector('button'); b.textContent = 'Sent — we will be in touch'; b.disabled = true;">
+        <h3 class="form-title">Schedule a free consultation</h3>
+        <div class="field-row">
+          <div class="field">
+            <label>First name</label>
+            <input type="text" placeholder="Your first name" required />
+          </div>
+          <div class="field">
+            <label>Last name</label>
+            <input type="text" placeholder="Your last name" required />
+          </div>
+        </div>
+        <div class="field">
+          <label>Work email</label>
+          <input type="email" placeholder="you@company.com" required />
+        </div>
+        <div class="field">
+          <label>Company / Organization</label>
+          <input type="text" placeholder="Acme Inc." />
+        </div>
+        <div class="field">
+          <label>Phone</label>
+          <input type="tel" placeholder="+971 ..." />
+        </div>
+        <div class="field">
+          <label>How can we help?</label>
+          <textarea rows="3" placeholder="Date, audience size, type of event, anything we should know"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">
+          <span>Book My Free Consultation</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+        </button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="#" class="logo">
+          <img class="logo-img" src="assets/logo.png" alt="Yahala World" onerror="this.onerror=null;this.src='assets/logo-placeholder.svg';" />
+          <span class="logo-text">Yahala World</span>
+        </a>
+        <p>The smart operating platform for events that matter.</p>
+        <p class="addr">Office 209, Floor 2<br/>Business Hub, Dubai, UAE</p>
+      </div>
+      <div>
+        <h5>Platform</h5>
+        <a href="#solutions">Registration</a>
+        <a href="#solutions">Attendance</a>
+        <a href="#solutions">Speaker Management</a>
+        <a href="#solutions">Certificates</a>
+        <a href="#solutions">Analytics</a>
+      </div>
+      <div>
+        <h5>Company</h5>
+        <a href="#about">About</a>
+        <a href="#why">Why Yahala</a>
+        <a href="#industries">Industries</a>
+        <a href="#partners">Partners</a>
+        <a href="#contact">Contact</a>
+      </div>
+      <div>
+        <h5>Legal</h5>
+        <a href="#">Terms &amp; Conditions</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Cookie Policy</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Yahala World. All rights reserved.</span>
+      <span>Designed with motion in mind.</span>
+    </div>
+  </div>
+</footer>
+
+<!-- Libraries -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="main.js"></script>
+
+</body>
+</html>
