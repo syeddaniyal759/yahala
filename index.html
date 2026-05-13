@@ -43,23 +43,42 @@
       <img class="logo-img" src="assets/logo.png" alt="Yahala World" onerror="this.onerror=null;this.src='assets/logo-placeholder.svg';" />
       <span class="logo-text">Yahala World</span>
     </a>
-    <ul class="nav-links">
-      <li><a href="#home">Home</a></li>
-      <li><a href="#about">About</a></li>
-      <li><a href="#why">Why Choose Us</a></li>
-      <li><a href="#solutions">Solutions</a></li>
-      <li><a href="#partners">Partners</a></li>
-      <li><a href="#contact">Contact</a></li>
-    </ul>
     <div class="nav-right">
       <a href="ar/index.html" class="lang-switch" aria-label="Switch to Arabic">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></svg>
         <span>عربي</span>
       </a>
-      <a href="#contact" class="nav-cta">Book a Demo</a>
+      <button class="menu-toggle" id="menu-toggle" aria-label="Open menu" aria-expanded="false">
+        <span class="mt-text">Menu</span>
+        <span class="mt-icon"><span></span><span></span><span></span></span>
+      </button>
     </div>
   </div>
 </nav>
+
+<!-- Fullscreen takeover menu -->
+<div class="fullscreen-menu" id="fullscreen-menu" aria-hidden="true">
+  <button class="fm-close" id="fm-close" aria-label="Close menu" type="button">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+  </button>
+  <div class="fm-inner">
+    <ul class="fm-list">
+      <li><a href="#home">Home</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#solutions">Solutions</a></li>
+      <li><a href="#industries">Industries</a></li>
+      <li><a href="#why">Why Us</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <div class="fm-foot">
+      <a href="#contact" class="fm-cta">
+        Book a Demo
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+      </a>
+      <p>info@yahalaworld.com</p>
+    </div>
+  </div>
+</div>
 
 <!-- Hero -->
 <section class="hero-v4" id="home">
