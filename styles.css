@@ -998,13 +998,18 @@ ul { list-style: none; }
 @media (max-width: 720px) { .get-grid { grid-template-columns: 1fr; gap: 12px; } }
 
 /* ===== Industries (pinned horizontal — GSAP handles pin spacing) ===== */
-.industries { position: relative; z-index: 2; background: rgba(232, 227, 217, 0.7); }
+.industries {
+  position: relative;
+  z-index: 2;
+  background: rgba(232, 227, 217, 0.7);
+  min-height: 100vh;            /* fallback reservation if GSAP fails to load */
+}
 .industries-pin {
   height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  overflow: hidden;
+  overflow: hidden;             /* keeps overflowing track from leaking into other sections */
 }
 .industries-head { text-align: center; padding: 0 32px 50px; }
 .industries-track {
