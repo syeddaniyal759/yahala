@@ -1011,7 +1011,31 @@ document.querySelectorAll('.tilt').forEach((el) => {
   }, { passive: true });
 })();
 
-/* ------------------ Refresh ScrollTrigger after fonts/loader ------------------ */
-window.addEventListener('load', () => {
-  setTimeout(() => ScrollTrigger.refresh(), 800);
+/* ------------------ Refresh ScrollTrigger after fonts/loader ------------------
+   Critical for deployment: brand fonts (Moon 2.0, Madani Arabic) load async,
+   reflow the layout after ScrollTrigger has already measured positions.
+   Refresh on EVERY major layout event so pinned sections stay correct. */
+function refreshTriggers() {
+  try { ScrollTrigger.refresh(); } catch (e) {}
+}
+
+// 1. After all stylesheets + images have loaded
+window.addEventListener('load', () => setTimeout(refreshTriggers, 100));
+
+// 2. After all @font-face fonts have finished loading (the big one for deploy)
+if (document.fonts && document.fonts.ready) {
+  document.fonts.ready.then(() => {
+    refreshTriggers();
+    // Belt-and-suspenders: refresh again a few hundred ms later in case
+    // a late-loading font still triggers reflow
+    setTimeout(refreshTriggers, 400);
+    setTimeout(refreshTriggers, 1200);
+  });
+}
+
+// 3. On window resize (defensive)
+let resizeTimer;
+window.addEventListener('resize', () => {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(refreshTriggers, 250);
 });
