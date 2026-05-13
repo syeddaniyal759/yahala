@@ -960,6 +960,42 @@ document.querySelectorAll('.tilt').forEach((el) => {
   });
 })();
 
+/* ------------------ Fullscreen takeover menu ------------------ */
+(function fullscreenMenu() {
+  const toggle = document.getElementById('menu-toggle');
+  const menu = document.getElementById('fullscreen-menu');
+  const closeBtn = document.getElementById('fm-close');
+  if (!toggle || !menu) return;
+
+  function open() {
+    document.body.classList.add('menu-open');
+    toggle.setAttribute('aria-expanded', 'true');
+    menu.setAttribute('aria-hidden', 'false');
+  }
+  function close() {
+    document.body.classList.remove('menu-open');
+    toggle.setAttribute('aria-expanded', 'false');
+    menu.setAttribute('aria-hidden', 'true');
+  }
+  function toggleMenu() {
+    if (document.body.classList.contains('menu-open')) close();
+    else open();
+  }
+
+  toggle.addEventListener('click', toggleMenu);
+  if (closeBtn) closeBtn.addEventListener('click', close);
+
+  // Close when a menu item is clicked (small delay so the link can scroll first)
+  menu.querySelectorAll('a').forEach((a) => {
+    a.addEventListener('click', () => setTimeout(close, 220));
+  });
+
+  // ESC closes
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && document.body.classList.contains('menu-open')) close();
+  });
+})();
+
 /* ------------------ Nav hide on scroll down ------------------ */
 (function navScroll() {
   const nav = document.getElementById('nav');
