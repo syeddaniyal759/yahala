@@ -34,23 +34,42 @@
       <img class="logo-img" src="../assets/logo.png" alt="يا هلا بالعالم" onerror="this.onerror=null;this.src='../assets/logo-placeholder.svg';" />
       <span class="logo-text">يا هلا بالعالم</span>
     </a>
-    <ul class="nav-links">
-      <li><a href="#home">الرئيسية</a></li>
-      <li><a href="#about">من نحن</a></li>
-      <li><a href="#why">لماذا نحن</a></li>
-      <li><a href="#solutions">حلولنا</a></li>
-      <li><a href="#partners">شركاؤنا</a></li>
-      <li><a href="#contact">تواصل معنا</a></li>
-    </ul>
     <div class="nav-right">
       <a href="../index.html" class="lang-switch" aria-label="Switch to English">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></svg>
         <span style="font-family:'Quicksand',sans-serif">EN</span>
       </a>
-      <a href="#contact" class="nav-cta">احجز عرضًا</a>
+      <button class="menu-toggle" id="menu-toggle" aria-label="افتح القائمة" aria-expanded="false">
+        <span class="mt-text">القائمة</span>
+        <span class="mt-icon"><span></span><span></span><span></span></span>
+      </button>
     </div>
   </div>
 </nav>
+
+<!-- Fullscreen takeover menu -->
+<div class="fullscreen-menu" id="fullscreen-menu" aria-hidden="true">
+  <button class="fm-close" id="fm-close" aria-label="إغلاق القائمة" type="button">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+  </button>
+  <div class="fm-inner">
+    <ul class="fm-list">
+      <li><a href="#home">الرئيسية</a></li>
+      <li><a href="#about">من نحن</a></li>
+      <li><a href="#solutions">حلولنا</a></li>
+      <li><a href="#industries">القطاعات</a></li>
+      <li><a href="#why">لماذا نحن</a></li>
+      <li><a href="#contact">تواصل معنا</a></li>
+    </ul>
+    <div class="fm-foot">
+      <a href="#contact" class="fm-cta">
+        احجز عرضًا
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+      </a>
+      <p>info@yahalaworld.com</p>
+    </div>
+  </div>
+</div>
 
 <!-- Hero -->
 <section class="hero-v4" id="home">
