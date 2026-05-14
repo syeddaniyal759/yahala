@@ -3,54 +3,106 @@
    Display: Moon 2.0 (Latin) · Codec Pro (Arabic)
    ========================================================== */
 
+/* Moon 2.0 — Latin display + body */
 @font-face {
   font-family: 'Moon 2.0';
-  src: url('assets/fonts/Moon2.0-Light.otf') format('opentype');
-  font-weight: 300;
+  src: url('fonts/Moon2.0-Light.otf') format('opentype');
+  font-weight: 200 350;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'Moon 2.0';
-  src: url('assets/fonts/Moon2.0-Regular.otf') format('opentype');
-  font-weight: 400;
+  src: url('fonts/Moon2.0-Regular.otf') format('opentype');
+  font-weight: 351 550;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'Moon 2.0';
-  src: url('assets/fonts/Moon2.0-Bold.otf') format('opentype');
-  font-weight: 500 900;            /* covers 500/600/700/etc — all map to Bold */
+  src: url('fonts/Moon2.0-Bold.otf') format('opentype');
+  font-weight: 551 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Codec Pro — Arabic body fallback */
+@font-face {
+  font-family: 'Codec Pro';
+  src: url('fonts/CodecPro-Regular.ttf') format('truetype');
+  font-weight: 400 900;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'Codec Pro';
-  src: url('assets/fonts/CodecPro-Regular.ttf') format('truetype');
-  font-weight: 400 900;            /* single weight — covers regular through bold */
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'Codec Pro';
-  src: url('assets/fonts/CodecPro-Italic.ttf') format('truetype');
+  src: url('fonts/CodecPro-Italic.ttf') format('truetype');
   font-weight: 400 900;
   font-style: italic;
   font-display: swap;
 }
 
-/* Madani Arabic — drop the TTFs into assets/fonts/ with these exact names */
+/* Madani Arabic — full weight family (Thin → Black) */
 @font-face {
   font-family: 'Madani Arabic';
-  src: url('assets/fonts/MadaniArabic-Regular.ttf') format('truetype');
-  font-weight: 300 500;
+  src: url('fonts/Madani%20Arabic%20Thin%20400.ttf') format('truetype');
+  font-weight: 100;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'Madani Arabic';
-  src: url('assets/fonts/MadaniArabic-Bold.ttf') format('truetype');
-  font-weight: 600 900;
+  src: url('fonts/Madani%20Arabic%20ExtraLight%20400.ttf') format('truetype');
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Madani Arabic';
+  src: url('fonts/Madani%20Arabic%20Light%20400.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Madani Arabic';
+  src: url('fonts/Madani%20Arabic%20Regular%20400.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Madani Arabic';
+  src: url('fonts/Madani%20Arabic%20Medium%20400.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Madani Arabic';
+  src: url('fonts/Madani%20Arabic%20SemiBold%20400.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Madani Arabic';
+  src: url('fonts/Madani%20Arabic%20Bold%20400.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Madani Arabic';
+  src: url('fonts/Madani%20Arabic%20ExtraBold%20400.ttf') format('truetype');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Madani Arabic';
+  src: url('fonts/Madani%20Arabic%20Black%20400.ttf') format('truetype');
+  font-weight: 900;
   font-style: normal;
   font-display: swap;
 }
