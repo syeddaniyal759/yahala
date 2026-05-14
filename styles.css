@@ -1053,15 +1053,24 @@ ul { list-style: none; }
 .industries {
   position: relative;
   z-index: 2;
-  background: rgba(232, 227, 217, 0.7);
-  min-height: 100vh;            /* fallback reservation if GSAP fails to load */
+  background: rgba(232, 227, 217, 0.96);   /* near-solid: blocks the section above from bleeding through */
+  min-height: 100vh;                       /* fallback reservation if GSAP fails to load */
+  isolation: isolate;                      /* new stacking context — prevents previous section's content from showing through */
 }
 .industries-pin {
   height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  overflow: hidden;             /* keeps overflowing track from leaking into other sections */
+  overflow: hidden;                        /* keeps overflowing track from leaking into other sections */
+  background: rgba(232, 227, 217, 1);      /* solid backdrop on the pinned panel itself */
+}
+.industries-head {
+  position: relative;
+  z-index: 2;                              /* title sits above the track row */
+  background: rgba(232, 227, 217, 0.9);    /* small solid bg behind eyebrow + title */
+  padding-top: 24px;
+  padding-bottom: 32px;
 }
 .industries-head { text-align: center; padding: 0 32px 50px; }
 .industries-track {
@@ -3002,6 +3011,15 @@ body.menu-open .fm-foot { opacity: 1; transform: translateY(0); }
 /* ==========================================================
    RTL overrides — Arabic page
    ========================================================== */
+
+/* Redefine display + body font variables on the RTL document so that every
+   `var(--font-display)` and `var(--font-body)` automatically resolves to
+   Madani Arabic. This catches every section without listing each selector. */
+[dir="rtl"] {
+  --font-display: 'Madani Arabic', 'Codec Pro', 'Cairo', system-ui, sans-serif;
+  --font-body: 'Madani Arabic', 'Codec Pro', 'Cairo', system-ui, sans-serif;
+}
+
 [dir="rtl"] body,
 [dir="rtl"] .hero-title,
 [dir="rtl"] .section-title,
@@ -3098,6 +3116,16 @@ body.menu-open .fm-foot { opacity: 1; transform: translateY(0); }
 [dir="rtl"] .menu-toggle,
 [dir="rtl"] .menu-toggle .mt-text {
   font-family: 'Madani Arabic', 'Codec Pro', 'Cairo', system-ui, sans-serif;
+}
+
+/* Brand promise — explicitly pin to Madani Arabic on RTL.
+   The block uses var(--font-display) but adding a hard override here so
+   no specificity / variable-cascade quirk can leave it on Moon 2.0. */
+[dir="rtl"] .brand-promise,
+[dir="rtl"] .brand-promise-eyebrow,
+[dir="rtl"] .brand-promise h3,
+[dir="rtl"] .brand-promise-grid > div {
+  font-family: 'Madani Arabic', 'Codec Pro', 'Cairo', system-ui, sans-serif !important;
 }
 [dir="rtl"] .fm-list li { line-height: 1.45; padding: 2px 0; }
 [dir="rtl"] .fm-list a {
