@@ -3090,8 +3090,15 @@ body.menu-open .fm-foot { opacity: 1; transform: translateY(0); }
 [dir="rtl"] .t-card p { text-align: right; }
 [dir="rtl"] .t-card footer { text-align: right; }
 
-/* Fullscreen menu — Arabic glyphs need taller line-box than Latin
-   to avoid clipping by the overflow:hidden reveal trick. */
+/* Fullscreen menu — force Madani Arabic on every menu element on the AR page,
+   plus give Arabic glyphs a taller line-box to avoid overflow:hidden clipping */
+[dir="rtl"] .fm-list a,
+[dir="rtl"] .fm-cta,
+[dir="rtl"] .fm-foot p,
+[dir="rtl"] .menu-toggle,
+[dir="rtl"] .menu-toggle .mt-text {
+  font-family: 'Madani Arabic', 'Codec Pro', 'Cairo', system-ui, sans-serif;
+}
 [dir="rtl"] .fm-list li { line-height: 1.45; padding: 2px 0; }
 [dir="rtl"] .fm-list a {
   font-size: clamp(22px, min(6vw, 7.2vh), 70px);
