@@ -1011,6 +1011,50 @@ document.querySelectorAll('.tilt').forEach((el) => {
   }, { passive: true });
 })();
 
+/* ------------------ Content protection deterrents ------------------
+   Blocks right-click, common DevTools shortcuts, and copy/cut events.
+   Note: anyone determined can bypass via browser menu, disabled JS, or
+   view-source — this only stops casual users. */
+(function contentGuard() {
+  // 1. Right-click menu (which contains "Inspect")
+  document.addEventListener('contextmenu', (e) => { e.preventDefault(); return false; });
+
+  // 2. DevTools / view-source / save shortcuts
+  document.addEventListener('keydown', (e) => {
+    const k = (e.key || '').toLowerCase();
+    // F12
+    if (k === 'f12') { e.preventDefault(); return false; }
+    // Ctrl+Shift+I / J / C  (Chrome / Edge / Firefox DevTools panels + element picker)
+    if (e.ctrlKey && e.shiftKey && (k === 'i' || k === 'j' || k === 'c')) {
+      e.preventDefault(); return false;
+    }
+    // Cmd+Opt+I / J / C on macOS
+    if (e.metaKey && e.altKey && (k === 'i' || k === 'j' || k === 'c')) {
+      e.preventDefault(); return false;
+    }
+    // Ctrl+U (view source)
+    if (e.ctrlKey && k === 'u') { e.preventDefault(); return false; }
+    // Cmd+Opt+U on macOS
+    if (e.metaKey && e.altKey && k === 'u') { e.preventDefault(); return false; }
+    // Ctrl+S / Cmd+S (save page)
+    if ((e.ctrlKey || e.metaKey) && k === 's') { e.preventDefault(); return false; }
+    // Ctrl+A (select all) — optional; remove these two lines if you want users to be able to highlight
+    if ((e.ctrlKey || e.metaKey) && k === 'a' && !['INPUT','TEXTAREA'].includes((e.target.tagName||'').toUpperCase())) {
+      e.preventDefault(); return false;
+    }
+  });
+
+  // 3. Copy / cut / drag — silently no-op
+  ['copy', 'cut', 'dragstart'].forEach((evt) => {
+    document.addEventListener(evt, (e) => {
+      // Allow inside form fields
+      const tag = (e.target && e.target.tagName || '').toUpperCase();
+      if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+      e.preventDefault();
+    });
+  });
+})();
+
 /* ------------------ Refresh ScrollTrigger after fonts/loader ------------------
    Critical for deployment: brand fonts (Moon 2.0, Madani Arabic) load async,
    reflow the layout after ScrollTrigger has already measured positions.
