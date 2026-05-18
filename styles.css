@@ -176,7 +176,34 @@ html, body {
   font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
 }
-body { overflow-x: hidden; cursor: auto; max-width: 100vw; position: relative; }
+body {
+  overflow-x: hidden;
+  cursor: auto;
+  max-width: 100vw;
+  position: relative;
+  /* Disable text selection across the site */
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  -webkit-touch-callout: none;
+}
+/* Still allow selection inside form inputs so users can edit / paste */
+input, textarea, [contenteditable="true"] {
+  -webkit-user-select: text;
+     -moz-user-select: text;
+      -ms-user-select: text;
+          user-select: text;
+}
+/* Stop drag-to-save on images */
+img {
+  -webkit-user-drag: none;
+     -khtml-user-drag: none;
+       -moz-user-drag: none;
+         -o-user-drag: none;
+            user-drag: none;
+  pointer-events: auto;
+}
 
 a { color: inherit; text-decoration: none; }
 button { font: inherit; cursor: pointer; border: none; background: none; color: inherit; }
@@ -1049,28 +1076,18 @@ ul { list-style: none; }
 }
 @media (max-width: 720px) { .get-grid { grid-template-columns: 1fr; gap: 12px; } }
 
-/* ===== Industries (pinned horizontal — GSAP handles pin spacing) ===== */
+/* ===== Industries (pinned horizontal scroll via GSAP) ===== */
 .industries {
   position: relative;
   z-index: 2;
-  background: rgba(232, 227, 217, 0.96);   /* near-solid: blocks the section above from bleeding through */
-  min-height: 100vh;                       /* fallback reservation if GSAP fails to load */
-  isolation: isolate;                      /* new stacking context — prevents previous section's content from showing through */
+  background: rgba(232, 227, 217, 0.92);
 }
 .industries-pin {
   height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  overflow: hidden;                        /* keeps overflowing track from leaking into other sections */
-  background: rgba(232, 227, 217, 1);      /* solid backdrop on the pinned panel itself */
-}
-.industries-head {
-  position: relative;
-  z-index: 2;                              /* title sits above the track row */
-  background: rgba(232, 227, 217, 0.9);    /* small solid bg behind eyebrow + title */
-  padding-top: 24px;
-  padding-bottom: 32px;
+  overflow: hidden;
 }
 .industries-head { text-align: center; padding: 0 32px 50px; }
 .industries-track {
@@ -2702,6 +2719,7 @@ body.menu-open .fm-list li:nth-child(3) a { transform: translateY(0); transition
 body.menu-open .fm-list li:nth-child(4) a { transform: translateY(0); transition-delay: 0.26s; }
 body.menu-open .fm-list li:nth-child(5) a { transform: translateY(0); transition-delay: 0.32s; }
 body.menu-open .fm-list li:nth-child(6) a { transform: translateY(0); transition-delay: 0.38s; }
+body.menu-open .fm-list li:nth-child(7) a { transform: translateY(0); transition-delay: 0.44s; }
 
 .fm-foot {
   margin-top: 0;
@@ -2734,6 +2752,34 @@ body.menu-open .fm-foot { opacity: 1; transform: translateY(0); }
   transition: background 0.25s ease, color 0.25s ease, transform 0.25s ease;
 }
 .fm-cta:hover { background: var(--linen); color: var(--grape-deep); transform: translateY(-2px); }
+
+/* Row that holds the CTA + language switcher inside the menu footer */
+.fm-cta-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.fm-lang {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 18px;
+  background: transparent;
+  color: var(--linen);
+  border: 2px solid var(--linen);
+  border-radius: 999px;
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: background 0.25s ease, color 0.25s ease, transform 0.25s ease;
+}
+.fm-lang:hover { background: var(--linen); color: var(--grape-deep); transform: translateY(-2px); }
+.fm-lang svg { opacity: 0.85; }
 .fm-foot p { font-size: 13px; margin: 0; line-height: 1.5; }
 
 @media (max-width: 760px) {
