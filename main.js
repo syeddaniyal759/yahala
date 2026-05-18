@@ -916,17 +916,20 @@ document.querySelectorAll('.tilt').forEach((el) => {
   });
 });
 
-/* ------------------ Industries: pinned horizontal scroll ------------------ */
-(function industriesScroll() {
+/* ------------------ Industries: pinned horizontal scroll ------------------
+   Initialised AFTER document.fonts.ready so brand fonts (Moon 2.0, Madani
+   Arabic) finish loading before GSAP measures track width. This is the
+   single most important defence against the recurring "scroll messed up"
+   issue on the AR page. */
+function initIndustriesScroll() {
   const track = document.getElementById('industries-track');
   if (!track) return;
-  const cards = track.querySelectorAll('.ind-card');
   if (window.innerWidth < 860) return;
 
   const compute = () => {
     const trackWidth = track.scrollWidth;
     const distance = trackWidth - window.innerWidth + 80;
-    return distance;
+    return Math.max(distance, 0);
   };
 
   const rtl = document.documentElement.dir === 'rtl';
@@ -945,20 +948,16 @@ document.querySelectorAll('.tilt').forEach((el) => {
     },
   });
 
-  // Cards fade in on enter
-  cards.forEach((card, i) => {
-    gsap.from(card, {
-      scrollTrigger: {
-        trigger: card,
-        containerAnimation: gsap.getById ? null : null,
-        start: 'left 90%',
-      },
-      opacity: 0,
-      y: 40,
-      duration: 0.8,
-    });
-  });
-})();
+  // Force one more refresh after a beat in case anything resized
+  setTimeout(() => { try { ScrollTrigger.refresh(); } catch (e) {} }, 500);
+}
+
+if (document.fonts && document.fonts.ready) {
+  document.fonts.ready.then(initIndustriesScroll);
+} else {
+  // Fallback: run after window load if Font Loading API unavailable
+  window.addEventListener('load', initIndustriesScroll);
+}
 
 /* ------------------ Fullscreen takeover menu ------------------ */
 (function fullscreenMenu() {
