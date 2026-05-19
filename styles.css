@@ -164,8 +164,8 @@
   --shadow-lg: 0 28px 70px -22px rgba(46, 31, 86, 0.42);
 
   /* ===== Type ===== */
-  --font-display: 'Moon 2.0', 'Quicksand', system-ui, sans-serif;
-  --font-body: 'Moon 2.0', 'Inter', system-ui, sans-serif;
+  --font-display: 'Madani Arabic', 'Moon 2.0', 'Quicksand', system-ui, sans-serif;
+  --font-body: 'Madani Arabic', 'Moon 2.0', 'Inter', system-ui, sans-serif;
   --font-arabic: 'Madani Arabic', 'Codec Pro', 'Cairo', system-ui, sans-serif;
 }
 
