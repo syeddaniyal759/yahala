@@ -948,16 +948,26 @@ function initIndustriesScroll() {
     },
   });
 
-  // Force one more refresh after a beat in case anything resized
-  setTimeout(() => { try { ScrollTrigger.refresh(); } catch (e) {} }, 500);
+  // Multiple staggered refreshes — layout, images, late CSS can all shift measurements
+  setTimeout(() => { try { ScrollTrigger.refresh(); } catch (e) {} }, 300);
+  setTimeout(() => { try { ScrollTrigger.refresh(); } catch (e) {} }, 1000);
+  setTimeout(() => { try { ScrollTrigger.refresh(); } catch (e) {} }, 2500);
+  window.addEventListener('resize', () => { try { ScrollTrigger.refresh(); } catch (e) {} });
+  window.addEventListener('load', () => { try { ScrollTrigger.refresh(); } catch (e) {} });
 }
 
-if (document.fonts && document.fonts.ready) {
-  document.fonts.ready.then(initIndustriesScroll);
-} else {
-  // Fallback: run after window load if Font Loading API unavailable
-  window.addEventListener('load', initIndustriesScroll);
+// Initialise once after fonts load AND window load — whichever comes later
+function bootIndustriesScroll() {
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(() => {
+      if (document.readyState === 'complete') initIndustriesScroll();
+      else window.addEventListener('load', initIndustriesScroll);
+    });
+  } else {
+    window.addEventListener('load', initIndustriesScroll);
+  }
 }
+bootIndustriesScroll();
 
 /* ------------------ Fullscreen takeover menu ------------------ */
 (function fullscreenMenu() {
@@ -1082,3 +1092,234 @@ window.addEventListener('resize', () => {
   clearTimeout(resizeTimer);
   resizeTimer = setTimeout(refreshTriggers, 250);
 });
+
+/* ------------------ Phone country code selector ------------------ */
+(function phoneCountrySelector() {
+  // Curated list: GCC + MENA + major intl. iso, dial code, English name, Arabic name, flag emoji.
+  const COUNTRIES = [
+    { iso: 'SA', code: '+966', en: 'Saudi Arabia',        ar: 'السعودية',        flag: '🇸🇦' },
+    { iso: 'AE', code: '+971', en: 'United Arab Emirates', ar: 'الإمارات',         flag: '🇦🇪' },
+    { iso: 'KW', code: '+965', en: 'Kuwait',              ar: 'الكويت',           flag: '🇰🇼' },
+    { iso: 'QA', code: '+974', en: 'Qatar',               ar: 'قطر',              flag: '🇶🇦' },
+    { iso: 'BH', code: '+973', en: 'Bahrain',             ar: 'البحرين',          flag: '🇧🇭' },
+    { iso: 'OM', code: '+968', en: 'Oman',                ar: 'عُمان',            flag: '🇴🇲' },
+    { iso: 'YE', code: '+967', en: 'Yemen',               ar: 'اليمن',            flag: '🇾🇪' },
+    { iso: 'EG', code: '+20',  en: 'Egypt',               ar: 'مصر',              flag: '🇪🇬' },
+    { iso: 'JO', code: '+962', en: 'Jordan',              ar: 'الأردن',           flag: '🇯🇴' },
+    { iso: 'LB', code: '+961', en: 'Lebanon',             ar: 'لبنان',            flag: '🇱🇧' },
+    { iso: 'SY', code: '+963', en: 'Syria',               ar: 'سوريا',            flag: '🇸🇾' },
+    { iso: 'IQ', code: '+964', en: 'Iraq',                ar: 'العراق',           flag: '🇮🇶' },
+    { iso: 'PS', code: '+970', en: 'Palestine',           ar: 'فلسطين',           flag: '🇵🇸' },
+    { iso: 'MA', code: '+212', en: 'Morocco',             ar: 'المغرب',           flag: '🇲🇦' },
+    { iso: 'DZ', code: '+213', en: 'Algeria',             ar: 'الجزائر',          flag: '🇩🇿' },
+    { iso: 'TN', code: '+216', en: 'Tunisia',             ar: 'تونس',             flag: '🇹🇳' },
+    { iso: 'LY', code: '+218', en: 'Libya',               ar: 'ليبيا',            flag: '🇱🇾' },
+    { iso: 'SD', code: '+249', en: 'Sudan',               ar: 'السودان',          flag: '🇸🇩' },
+    { iso: 'TR', code: '+90',  en: 'Turkey',              ar: 'تركيا',            flag: '🇹🇷' },
+    { iso: 'IR', code: '+98',  en: 'Iran',                ar: 'إيران',            flag: '🇮🇷' },
+    { iso: 'PK', code: '+92',  en: 'Pakistan',            ar: 'باكستان',          flag: '🇵🇰' },
+    { iso: 'IN', code: '+91',  en: 'India',               ar: 'الهند',            flag: '🇮🇳' },
+    { iso: 'BD', code: '+880', en: 'Bangladesh',          ar: 'بنغلاديش',         flag: '🇧🇩' },
+    { iso: 'PH', code: '+63',  en: 'Philippines',         ar: 'الفلبين',          flag: '🇵🇭' },
+    { iso: 'ID', code: '+62',  en: 'Indonesia',           ar: 'إندونيسيا',        flag: '🇮🇩' },
+    { iso: 'MY', code: '+60',  en: 'Malaysia',            ar: 'ماليزيا',          flag: '🇲🇾' },
+    { iso: 'SG', code: '+65',  en: 'Singapore',           ar: 'سنغافورة',         flag: '🇸🇬' },
+    { iso: 'CN', code: '+86',  en: 'China',               ar: 'الصين',            flag: '🇨🇳' },
+    { iso: 'JP', code: '+81',  en: 'Japan',               ar: 'اليابان',          flag: '🇯🇵' },
+    { iso: 'KR', code: '+82',  en: 'South Korea',         ar: 'كوريا الجنوبية',   flag: '🇰🇷' },
+    { iso: 'GB', code: '+44',  en: 'United Kingdom',      ar: 'المملكة المتحدة',  flag: '🇬🇧' },
+    { iso: 'IE', code: '+353', en: 'Ireland',             ar: 'أيرلندا',          flag: '🇮🇪' },
+    { iso: 'FR', code: '+33',  en: 'France',              ar: 'فرنسا',            flag: '🇫🇷' },
+    { iso: 'DE', code: '+49',  en: 'Germany',             ar: 'ألمانيا',          flag: '🇩🇪' },
+    { iso: 'IT', code: '+39',  en: 'Italy',               ar: 'إيطاليا',          flag: '🇮🇹' },
+    { iso: 'ES', code: '+34',  en: 'Spain',               ar: 'إسبانيا',          flag: '🇪🇸' },
+    { iso: 'NL', code: '+31',  en: 'Netherlands',         ar: 'هولندا',           flag: '🇳🇱' },
+    { iso: 'BE', code: '+32',  en: 'Belgium',             ar: 'بلجيكا',           flag: '🇧🇪' },
+    { iso: 'CH', code: '+41',  en: 'Switzerland',         ar: 'سويسرا',           flag: '🇨🇭' },
+    { iso: 'SE', code: '+46',  en: 'Sweden',              ar: 'السويد',           flag: '🇸🇪' },
+    { iso: 'NO', code: '+47',  en: 'Norway',              ar: 'النرويج',          flag: '🇳🇴' },
+    { iso: 'DK', code: '+45',  en: 'Denmark',             ar: 'الدنمارك',         flag: '🇩🇰' },
+    { iso: 'FI', code: '+358', en: 'Finland',             ar: 'فنلندا',           flag: '🇫🇮' },
+    { iso: 'GR', code: '+30',  en: 'Greece',              ar: 'اليونان',          flag: '🇬🇷' },
+    { iso: 'PT', code: '+351', en: 'Portugal',            ar: 'البرتغال',         flag: '🇵🇹' },
+    { iso: 'RU', code: '+7',   en: 'Russia',              ar: 'روسيا',            flag: '🇷🇺' },
+    { iso: 'US', code: '+1',   en: 'United States',       ar: 'الولايات المتحدة', flag: '🇺🇸' },
+    { iso: 'CA', code: '+1',   en: 'Canada',              ar: 'كندا',             flag: '🇨🇦' },
+    { iso: 'MX', code: '+52',  en: 'Mexico',              ar: 'المكسيك',          flag: '🇲🇽' },
+    { iso: 'BR', code: '+55',  en: 'Brazil',              ar: 'البرازيل',         flag: '🇧🇷' },
+    { iso: 'AR', code: '+54',  en: 'Argentina',           ar: 'الأرجنتين',        flag: '🇦🇷' },
+    { iso: 'AU', code: '+61',  en: 'Australia',           ar: 'أستراليا',         flag: '🇦🇺' },
+    { iso: 'NZ', code: '+64',  en: 'New Zealand',         ar: 'نيوزيلندا',        flag: '🇳🇿' },
+    { iso: 'ZA', code: '+27',  en: 'South Africa',        ar: 'جنوب أفريقيا',     flag: '🇿🇦' },
+    { iso: 'NG', code: '+234', en: 'Nigeria',             ar: 'نيجيريا',          flag: '🇳🇬' },
+    { iso: 'KE', code: '+254', en: 'Kenya',               ar: 'كينيا',            flag: '🇰🇪' },
+    { iso: 'ET', code: '+251', en: 'Ethiopia',            ar: 'إثيوبيا',          flag: '🇪🇹' },
+  ];
+
+  const isArabic = document.documentElement.dir === 'rtl';
+
+  document.querySelectorAll('[data-phone-input]').forEach((root) => {
+    const btn = root.querySelector('.phone-cc-btn');
+    const flagEl = root.querySelector('[data-flag]');
+    const codeEl = root.querySelector('[data-code]');
+    const numInput = root.querySelector('.phone-num');
+    const menu = root.querySelector('.phone-cc-menu');
+    const search = root.querySelector('.phone-cc-search');
+    const list = root.querySelector('.phone-cc-list');
+    const hidden = root.parentElement.querySelector('[data-phone-output]');
+
+    let selected = COUNTRIES.find((c) => c.iso === (root.dataset.default || 'SA')) || COUNTRIES[0];
+
+    // Sort alphabetically by the active-language name. Use Intl.Collator so
+    // Arabic letters sort correctly when on the AR page.
+    const collator = new Intl.Collator(isArabic ? 'ar' : 'en', { sensitivity: 'base' });
+    const sortedCountries = [...COUNTRIES].sort((a, b) =>
+      collator.compare(isArabic ? a.ar : a.en, isArabic ? b.ar : b.en)
+    );
+
+    function render(filter) {
+      const q = (filter || '').trim().toLowerCase();
+      const filtered = q
+        ? sortedCountries.filter((c) =>
+            c.en.toLowerCase().includes(q) ||
+            c.ar.includes(q) ||
+            c.code.includes(q) ||
+            c.iso.toLowerCase().includes(q)
+          )
+        : sortedCountries;
+      if (!filtered.length) {
+        list.innerHTML = '<li class="phone-cc-empty">' + (isArabic ? 'لا توجد نتائج' : 'No results') + '</li>';
+        return;
+      }
+      list.innerHTML = filtered.map((c) => `
+        <li role="option" data-iso="${c.iso}" ${c.iso === selected.iso ? 'aria-selected="true"' : ''}>
+          <span class="flag">${c.flag}</span>
+          <span class="name">${isArabic ? c.ar : c.en}</span>
+          <span class="code">${c.code}</span>
+        </li>
+      `).join('');
+      // Re-parse flags with Twemoji if available so they render on Windows/Chrome too
+      if (window.twemoji) {
+        try { twemoji.parse(list, { folder: 'svg', ext: '.svg' }); } catch (e) {}
+      }
+    }
+
+    function applySelection(c) {
+      selected = c;
+      flagEl.textContent = c.flag;
+      codeEl.textContent = c.code;
+      if (window.twemoji) {
+        try { twemoji.parse(flagEl, { folder: 'svg', ext: '.svg' }); } catch (e) {}
+      }
+      syncHidden();
+    }
+
+    function syncHidden() {
+      if (!hidden) return;
+      const num = (numInput.value || '').replace(/\D+/g, '');
+      hidden.value = num ? selected.code + num : '';
+    }
+
+    function open() {
+      menu.hidden = false;
+      btn.setAttribute('aria-expanded', 'true');
+      search.value = '';
+      render('');
+      setTimeout(() => search.focus(), 50);
+    }
+    function close() {
+      menu.hidden = true;
+      btn.setAttribute('aria-expanded', 'false');
+    }
+
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      menu.hidden ? open() : close();
+    });
+
+    search.addEventListener('input', () => render(search.value));
+    search.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') { close(); btn.focus(); }
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        const first = list.querySelector('li[data-iso]');
+        if (first) first.click();
+      }
+    });
+
+    list.addEventListener('click', (e) => {
+      const li = e.target.closest('li[data-iso]');
+      if (!li) return;
+      const c = COUNTRIES.find((x) => x.iso === li.dataset.iso);
+      if (c) {
+        applySelection(c);
+        close();
+        numInput.focus();
+      }
+    });
+
+    numInput.addEventListener('input', syncHidden);
+
+    // Close on outside click
+    document.addEventListener('click', (e) => {
+      if (!root.contains(e.target)) close();
+    });
+    // Close on ESC
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !menu.hidden) close();
+    });
+
+    // Initial render of the trigger button
+    applySelection(selected);
+  });
+})();
+
+/* ------------------ Contact form submit (Formsubmit.co AJAX) ------------------
+   Posts to formsubmit.co with JSON. Shows the .form-success div on 200, the
+   .form-error div on failure. Keeps the user on the page. */
+(function contactFormHandler() {
+  document.querySelectorAll('form.contact-form[action*="formsubmit.co"]').forEach((form) => {
+    const successEl = form.querySelector('.form-success');
+    const errorEl = form.querySelector('.form-error');
+    const submitBtn = form.querySelector('button[type="submit"]');
+    const originalLabel = submitBtn ? submitBtn.querySelector('span')?.textContent : '';
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (successEl) successEl.hidden = true;
+      if (errorEl) errorEl.hidden = true;
+
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        const span = submitBtn.querySelector('span');
+        if (span) span.textContent = document.documentElement.dir === 'rtl' ? 'جارٍ الإرسال…' : 'Sending…';
+      }
+
+      const formData = new FormData(form);
+      const payload = Object.fromEntries(formData.entries());
+
+      try {
+        const res = await fetch(form.action, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        const data = await res.json().catch(() => ({}));
+        if (res.ok && (data.success === 'true' || data.success === true)) {
+          if (successEl) successEl.hidden = false;
+          form.reset();
+        } else {
+          throw new Error(data.message || 'submit failed');
+        }
+      } catch (err) {
+        if (errorEl) errorEl.hidden = false;
+      } finally {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          const span = submitBtn.querySelector('span');
+          if (span && originalLabel) span.textContent = originalLabel;
+        }
+      }
+    });
+  });
+})();
