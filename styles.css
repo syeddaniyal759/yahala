@@ -3312,7 +3312,7 @@ body.menu-open .fm-foot { opacity: 1; transform: translateY(0); }
 [dir="rtl"] .hero-v4-title { line-height: 1.25; }
 [dir="rtl"] .hero-v4-title .gold {
   display: block;
-  margin-top: 14px;
+  margin-top: 20px;
   line-height: 1.3;
   padding-bottom: 0.15em;
 }
